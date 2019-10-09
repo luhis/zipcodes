@@ -11,7 +11,9 @@ let rec secondToLast =
     | h :: [_] -> Some(h)
     | _ :: t   -> secondToLast t
 
-let extractState (s: string) = s.Split ' ' |> Seq.toList |> secondToLast
+let split (c: char) (s: string) = s.Split c
+
+let extractState = split ' ' >> Seq.toList >> secondToLast
 
 let toState =
     extractState >>
