@@ -21,6 +21,16 @@ let toState =
     | Some a -> a
     | None -> ""
 
-let rows = table.Rows |> Seq.map (fun r -> r.``3‑Digit ZIP Code Prefix`` + "," + (toState r.``Column A 3‑Digit Destinations Label to``))
+let rowToCsv (row: ZipCodes.L0023DigitZipCodePrefixMatrix.Row) =
+    let prefix = row.``3‑Digit ZIP Code Prefix``.TrimEnd 'N'
+    prefix + "," + (toState row.``Column A 3‑Digit Destinations Label to``)
 
-System.IO.File.WriteAllLines ("zips.csv", rows)
+let notEndsX (row: ZipCodes.L0023DigitZipCodePrefixMatrix.Row) = row.``3‑Digit ZIP Code Prefix``.EndsWith "X" |> not
+
+let rows = table.Rows |> Seq.filter notEndsX |> Seq.map rowToCsv |> Seq.toList
+
+let csv = "prefix,state"::rows
+
+let fileName = "zips.csv";
+System.IO.File.Delete fileName
+System.IO.File.WriteAllLines (fileName, csv)
