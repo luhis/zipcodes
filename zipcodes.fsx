@@ -1,18 +1,17 @@
 #r "./packages/FSharp.Data/lib/net45/FSharp.Data.dll"
 open FSharp.Data
-open System
 
 type ZipCodes = HtmlProvider<"https://pe.usps.com/Archive/HTML/DMMArchive20050106/print/L002.htm">
 
 let table = ZipCodes.Load("https://pe.usps.com/Archive/HTML/DMMArchive20050106/print/L002.htm").Tables.``L002 3-Digit ZIP Code Prefix Matrix``
 
-let rec secondToLast ls =
-    match ls with
-    |   []         -> None
-    |   h :: [_]   -> Some(h)
-    |   h :: t     -> secondToLast t
+let rec secondToLast =
+    function
+    | []       -> None
+    | h :: [_] -> Some(h)
+    | _ :: t   -> secondToLast t
 
-let extractState (s: string) = s.Split (' ') |> Seq.toList |> secondToLast
+let extractState (s: string) = s.Split ' ' |> Seq.toList |> secondToLast
 
 let toState =
     extractState >>
