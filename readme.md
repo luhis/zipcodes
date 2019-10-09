@@ -8,4 +8,4 @@ choco install paket
 paket install
 ```
 
-Open code in VS Code with Ionide, select all, hit control enter
+Open code in VS Code with Ionide, select all, hit alt-enter
